@@ -8,7 +8,7 @@ It's also very simple to use and get started with. DOMPurify was [started in Feb
 
 DOMPurify is written in JavaScript and works in all modern browsers (Safari, Opera (15+), Internet Explorer (10+), Edge, Firefox and Chrome - as well as almost anything else using Blink or WebKit). It doesn't break on MSIE6 or other legacy browsers. It either uses [a fall-back](#what-about-older-browsers-like-msie8) or simply does nothing.
 
-Our automated tests cover [21 different browsers](https://github.com/cure53/DOMPurify/blob/master/test/karma.custom-launchers.config.js#L5) right now, more to come. We also cover Node.js v6.0.0, v8.0.0, v9.0.0 and v10.0.0, running DOMPurify on [jsdom](https://github.com/tmpvar/jsdom).
+Our automated tests cover [21 different browsers](https://github.com/cure53/DOMPurify/blob/master/test/karma.custom-launchers.config.js#L5) right now, more to come. We also cover Node.js v6.0.0, v8.0.0, v9.0.0 and v10.0.0, running DOMPurify on [jsdom](https://github.com/tmpvar/jsdom) or [domino](https://github.com/fgnass/domino).
 
 DOMPurify is written by security people who have vast background in web attacks and XSS. Fear not. For more details please also read about our [Security Goals & Threat Model](https://github.com/cure53/DOMPurify/wiki/Security-Goals-&-Threat-Model). Please, read it. Like, really.
 
@@ -54,6 +54,16 @@ DOMPurify also works server-side with node.js as well as client-side via [Browse
 
 ```bash
 npm install dompurify
+```
+For domino
+```javascript
+const createDOMPurify = require('dompurify');
+const domino = require('domino');
+
+const window = domino.createWindow('<h1>Hello, world</h1>', 'http://example.com');
+const DOMPurify = createDOMPurify(window);
+
+const clean = DOMPurify.sanitize(dirty);
 ```
 For JSDOM v10 or newer
 ```javascript
@@ -223,7 +233,7 @@ DOMPurify.addHook('beforeSanitizeElements', function(currentNode, data, config) 
 
 We are currently using Travis CI in combination with BrowserStack. This gives us the possibility to confirm for each and every commit that all is going according to plan in all supported browsers. Check out the build logs here: https://travis-ci.org/cure53/DOMPurify
 
-You can further run local tests by executing `npm test`. The tests work fine with Node.js v0.6.2 and jsdom@8.5.0.
+You can further run local tests by executing `npm test`. The tests work fine with Node.js v0.6.2, jsdom@8.5.0, and domino@2.1.0.
 
 All relevant commits will be signed with the key `0x24BB6BF4` for additional security (since 8th of April 2016).
 
@@ -240,7 +250,8 @@ We rely on npm run-scripts for integrating with out tooling infrastructure. We u
 These are our npm scripts:
 
 - `npm run dev` to start building while watching sources for changes
-- `npm run test` to run our test suite via jsdom and karma
+- `npm run test` to run our test suite via domino, jsdom, and karma
+  - `test:domino` to only run tests through domino
   - `test:jsdom` to only run tests through jsdom
   - `test:karma` to only run tests through karma
 - `npm run lint` to lint the sources using ESLint (via xo)
@@ -271,6 +282,6 @@ Big thanks also go to [@ydaniv](https://github.com/ydaniv), [@asutherland](https
 
 Further, thanks [@neilj](https://twitter.com/neilj) and [@0xsobky](https://twitter.com/0xsobky) for their code reviews and countless small optimizations, fixes and beautifications.
 
-Big thanks also go to [@tdeekens](https://twitter.com/tdeekens) for doing all the hard work and getting us on track with Travis CI and BrowserStack. And thanks to [@Joris-van-der-Wel](https://github.com/Joris-van-der-Wel) for setting up DOMPurify for jsdom and creating the additional test suite. And again [@tdeekens](https://twitter.com/tdeekens) for his [incredible efforts](https://github.com/cure53/DOMPurify/pull/206) and contribution to refactor DOMPurify into using ES201x, proper build tools, better test coverage and much more!
+Big thanks also go to [@tdeekens](https://twitter.com/tdeekens) for doing all the hard work and getting us on track with Travis CI and BrowserStack. And thanks to [@Joris-van-der-Wel](https://github.com/Joris-van-der-Wel) for setting up DOMPurify for jsdom and creating the additional test suite. [@cscott](https://github.com/cscott) set up DOMPurify for domino. And again [@tdeekens](https://twitter.com/tdeekens) for his [incredible efforts](https://github.com/cure53/DOMPurify/pull/206) and contribution to refactor DOMPurify into using ES201x, proper build tools, better test coverage and much more!
 
 And last but not least, thanks to [BrowserStack](https://browserstack.com) for supporting this project with their services for free and delivering excellent, dedicated and very professional support on top of that.
